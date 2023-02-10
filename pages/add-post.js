@@ -2,6 +2,7 @@ import NavBar from '@/components/NavBar'
 import Head from 'next/head'
 import styled from 'styled-components'
 import Image from 'next/image'
+import Link from 'next/link'
 
 //стандартная обвертка
 const Wrapper = styled.div`
@@ -10,29 +11,6 @@ const Wrapper = styled.div`
    width: 100%;
 `
 
-//стилизация кнопки назад
-const BackBtn = styled.a`
-   background: #ffffff;
-   border-radius: 10px;
-   padding: 15px;
-   font-style: normal;
-   font-weight: 600;
-   font-size: 16px;
-   line-height: 24px;
-   color: #3260a1;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   cursor: pointer;
-   margin-top: 30px;
-   outline: none;
-   width: 117px;
-   height: 45px;
-   :hover {
-      box-shadow: 0px 0px 35px rgba(148, 174, 213, 1);
-      transition: 0.3s all ease;
-   }
-`
 //стилизуем форму
 // это обвертка для формы
 const FormWrapper = styled.div`
@@ -101,6 +79,7 @@ const AddBtn = styled.button`
    border: none;
    margin: 0 auto; // делаем по цекнтру
    display: flex; // обязательный параметр чтобы сделать по центру
+   cursor: pointer;
 `
 
 export default function AddPost() {
@@ -113,7 +92,7 @@ export default function AddPost() {
             <NavBar />
             <div className='container'>
                {/* стилизация кнопки назад */}
-               <BackBtn>
+               <Link href='/' className='backBtn'>
                   {/* вставляем нашу стрелку */}
                   <Image
                      src='/static/images/arrow.svg'
@@ -122,7 +101,8 @@ export default function AddPost() {
                      height={15}
                   />
                   Назад
-               </BackBtn>
+               </Link>
+
                <FormWrapper>
                   <Form>
                      <InputField>

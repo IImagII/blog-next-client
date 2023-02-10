@@ -1,5 +1,6 @@
 import NavBar from '@/components/NavBar'
 import Head from 'next/head'
+import Link from 'next/link'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -13,7 +14,7 @@ const PostsWrapper = styled.div`
    column-gap: 30px;
 `
 // непосредственно сами посты это маленькие квадратики их у нас будет 6шт
-const Post = styled.a`
+const Post = styled.div`
    width: 350px;
    height: 270px;
    border-radius: 15px;
@@ -54,8 +55,11 @@ export default function Home() {
             <div className='container'>
                <PostsWrapper>
                   <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>Мальдивы. Рай или пафос ? </PostTitle>
+                     <Link href='/post/1212' className='postTitle'>
+                        Мальдивы. Рай или пафос ?
+                     </Link>
                   </Post>
+
                   <Post bgImage={'./static/images/1.jpg'}>
                      <PostTitle>Италия. Остров Капри. Обзор. </PostTitle>
                   </Post>
