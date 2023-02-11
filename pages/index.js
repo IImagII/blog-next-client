@@ -43,7 +43,8 @@ const PostTitle = styled.div`
    border-radius: 0px 0px 15px 15px;
 `
 
-export default function Home() {
+export default function Home({ posts }) {
+   if (!posts) 'Loading....'
    return (
       <>
          <Head>
@@ -54,30 +55,31 @@ export default function Home() {
             <NavBar />
             <div className='container'>
                <PostsWrapper>
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <Link href='/post/1212' className='postTitle'>
-                        Мальдивы. Рай или пафос ?
+                  {posts.map(post => (
+                     <Link href={`/post/${post._id}`}>
+                        <Post bgImage={post.imgUrl} {...post} key={post._id}>
+                           <div className='postTitle'>{post.title}</div>
+                        </Post>
                      </Link>
-                  </Post>
-
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>Италия. Остров Капри. Обзор. </PostTitle>
-                  </Post>
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>США. Сан-Франциско, дорого ? </PostTitle>
-                  </Post>
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>Канада. Пейзажи вблизи Онтарио. </PostTitle>
-                  </Post>
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>Швейцария. Красота природы. </PostTitle>
-                  </Post>
-                  <Post bgImage={'./static/images/1.jpg'}>
-                     <PostTitle>Альпы. Покори вершину с нами ! </PostTitle>
-                  </Post>
+                  ))}
                </PostsWrapper>
             </div>
          </Wrapper>
       </>
    )
+}
+
+//делаем запрос на сервер для реализации SSR
+export async function getServerSideProps() {
+   const res = await fetch(`http://localhost:3002/api/post`)
+   const posts = await res.json()
+
+   //делаемпроверку если ничего не будет то выводим следующее
+   if (!posts) {
+      return {
+         notFound: true,
+      }
+   }
+
+   return { props: { posts } }
 }

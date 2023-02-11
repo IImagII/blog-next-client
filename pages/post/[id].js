@@ -3,6 +3,8 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import axios from 'axios'
 
 //стандартная обвертка
 const Wrapper = styled.div`
@@ -92,12 +94,29 @@ const RemovePostBtn = styled.a`
    cursor: pointer;
 `
 
-export default function Post() {
+export default function Post({ post }) {
+   const { query } = useRouter() // для получения id
+   const router = useRouter() // в next используется для навигации
+   //функция удаления поста
+   const removePostHandler = async () => {
+      try {
+         await axios
+            .post(`http://localhost:3002/api/post/remove`, {
+               id: query.id,
+            })
+            .then(() => router.push('/')) //делаем редирект на главную страницу
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
+   //проверка есть ли то-то в посте при загрузке
+   if (!post) 'Loading...'
    return (
       <>
          <Wrapper>
             <Head>
-               <title>ONE POST</title>
+               <title>{post.title}</title>
             </Head>
             <NavBar />
             <div className='container'>
@@ -115,40 +134,32 @@ export default function Post() {
 
                <WrapperPoster>
                   <PostItem>
-                     <PostTitle>Альпы. Покори вершину с нами !</PostTitle>
-                     <PostText>
-                        А́льпы (фр. Alpes, нем. Alpen, итал. Alpi, романш. Alps,
-                        словен. Alpe) — самый высокий и протяжённый горный
-                        хребет среди систем, целиком лежащих в Европе. При этом
-                        Кавказские горы выше, а Уральские — протяжённей, но они
-                        лежат также и на территории Азии (в зависимости от
-                        выбранного определения границы между Европой и Азией).
-                        Альпы представляют собой сложную систему хребтов и
-                        массивов, протянувшуюся выпуклой к северо-западу дугой
-                        от Лигурийского моря до Среднедунайской низменности.
-                        Альпы располагаются на территории 8 стран: Франции,
-                        Монако, Италии, Швейцарии, Германии, Австрии,
-                        Лихтенштейна и Словении. Общая длина альпийской дуги
-                        составляет около 1200 км (по внутреннему краю дуги —
-                        около 750 км), ширина — до 260 км. Самой высокой
-                        вершиной Альп является гора Монблан высотой 4810 метров
-                        над уровнем моря, расположенная на границе Франции и
-                        Италии[1]. Всего в Альпах сосредоточено около 100
-                        вершин-четырёхтысячников[2].
-                     </PostText>
+                     <PostTitle>{post.title}</PostTitle>
+                     <PostText>{post.text}</PostText>
                   </PostItem>
                   <PostItem>
                      <Image
-                        src='/static/images/1.jpg'
+                        src={post.imgUrl} //чтобы так выводилось смотреть настройки в next.config
                         alt='Post'
                         width={440}
                         height={356}
                      />
                   </PostItem>
-                  <RemovePostBtn>Удалить статью</RemovePostBtn>
+                  <RemovePostBtn onClick={removePostHandler}>
+                     Удалить статью
+                  </RemovePostBtn>
                </WrapperPoster>
             </div>
          </Wrapper>
       </>
    )
+}
+
+export async function getServerSideProps({ query }) {
+   const response = await fetch(`http://localhost:3002/api/post/${query.id}`)
+   const post = await response.json()
+
+   return {
+      props: { post },
+   }
 }

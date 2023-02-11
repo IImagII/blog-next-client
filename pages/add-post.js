@@ -3,6 +3,9 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 //стандартная обвертка
 const Wrapper = styled.div`
@@ -83,6 +86,26 @@ const AddBtn = styled.button`
 `
 
 export default function AddPost() {
+   const [title, setTitle] = useState('') // формируем заголовк для отправки на сервер
+   const [text, setText] = useState('') // формируем текст поста для отправки на сервер
+   const [imgUrl, setImgUrl] = useState('') // формируем картинку для отправки на сервер
+   const router = useRouter() // в next используется для навигации
+
+   //Создаем метод добавления постов
+   const addPost = async () => {
+      try {
+         await axios
+            .post('http://localhost:3002/api/post/add', {
+               title,
+               text,
+               imgUrl,
+            })
+            .then(() => router.push('/')) //делаем редирект на главную страницу
+      } catch (e) {
+         console.log(e)
+      }
+   }
+
    return (
       <>
          <Wrapper>
@@ -104,24 +127,33 @@ export default function AddPost() {
                </Link>
 
                <FormWrapper>
-                  <Form>
+                  <Form onSubmit={e => e.preventDefault()}>
                      <InputField>
                         {/* вставляем тег label */}
                         <TextLabel>Название статьи:</TextLabel>
                         {/* вставляем сам input */}
-                        <Input />
+                        <Input
+                           onChange={e => setTitle(e.target.value)}
+                           value={title}
+                        />
                      </InputField>
 
                      <InputField>
                         <TextLabel>Текст статьи:</TextLabel>
-                        <TextArea />
+                        <TextArea
+                           onChange={e => setText(e.target.value)}
+                           value={text}
+                        />
                      </InputField>
 
                      <InputField>
                         <TextLabel>URL картинки:</TextLabel>
-                        <Input />
+                        <Input
+                           onChange={e => setImgUrl(e.target.value)}
+                           value={imgUrl}
+                        />
                      </InputField>
-                     <AddBtn>Добавить</AddBtn>
+                     <AddBtn onClick={addPost}>Добавить</AddBtn>
                   </Form>
                </FormWrapper>
             </div>
