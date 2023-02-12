@@ -96,7 +96,7 @@ export default function AddPost() {
       try {
          await axios
             .post(
-               `https://server-next-blog-production.up.railway.app/post/add`,
+               `https://server-next-blog-production.up.railway.app/api/post/add`,
                {
                   title,
                   text,
