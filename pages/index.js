@@ -71,7 +71,7 @@ export default function Home({ posts }) {
 
 //делаем запрос на сервер для реализации SSR
 export async function getServerSideProps() {
-   const res = await fetch(`http://localhost:3002/api/post`)
+   const res = await fetch(`${process.env.API_HOST}/post`)
    const posts = await res.json()
 
    //делаемпроверку если ничего не будет то выводим следующее

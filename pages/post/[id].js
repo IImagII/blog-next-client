@@ -101,7 +101,7 @@ export default function Post({ post }) {
    const removePostHandler = async () => {
       try {
          await axios
-            .post(`http://localhost:3002/api/post/remove`, {
+            .post(`${process.env.API_HOST}/post/remove`, {
                id: query.id,
             })
             .then(() => router.push('/')) //делаем редирект на главную страницу
@@ -156,7 +156,7 @@ export default function Post({ post }) {
 }
 
 export async function getServerSideProps({ query }) {
-   const response = await fetch(`http://localhost:3002/api/post/${query.id}`)
+   const response = await fetch(`${process.env.API_HOST}/post/${query.id}`)
    const post = await response.json()
 
    return {
