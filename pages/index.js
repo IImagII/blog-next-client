@@ -71,15 +71,19 @@ export default function Home({ posts }) {
 
 //делаем запрос на сервер для реализации SSR
 export async function getServerSideProps() {
-   const res = await fetch(`${process.env.API_HOST}/post`)
-   const posts = await res.json()
+   try {
+      const res = await fetch(`${process.env.API_HOST}/post`)
+      const posts = await res.json()
 
-   //делаемпроверку если ничего не будет то выводим следующее
-   if (!posts) {
-      return {
-         notFound: true,
+      //делаем проверку если ничего не будет то выводим следующее
+      if (!posts) {
+         return {
+            notFound: true,
+         }
       }
+      console.log('posts', posts)
+      return { props: { posts } }
+   } catch {
+      return { props: { posts: null } }
    }
-
-   return { props: { posts } }
 }
