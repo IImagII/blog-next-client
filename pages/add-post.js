@@ -95,14 +95,11 @@ export default function AddPost() {
    const addPost = async () => {
       try {
          await axios
-            .post(
-               `https://server-next-blog-production.up.railway.app/api/post/add`,
-               {
-                  title,
-                  text,
-                  imgUrl,
-               }
-            )
+            .post(`/post/add`, {
+               title,
+               text,
+               imgUrl,
+            })
             .then(() => router.push('/')) //делаем редирект на главную страницу
       } catch (e) {
          console.log(e)
