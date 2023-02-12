@@ -97,13 +97,17 @@ const RemovePostBtn = styled.a`
 export default function Post({ post }) {
    const { query } = useRouter() // для получения id
    const router = useRouter() // в next используется для навигации
+
    //функция удаления поста
    const removePostHandler = async () => {
       try {
          await axios
-            .post(`${process.env.API_HOST}/post/remove`, {
-               id: query.id,
-            })
+            .post(
+               `https://server-next-blog-production.up.railway.app/api/post/remove`,
+               {
+                  id: query.id,
+               }
+            )
             .then(() => router.push('/')) //делаем редирект на главную страницу
       } catch (err) {
          console.log(err)
