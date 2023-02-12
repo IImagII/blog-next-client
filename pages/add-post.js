@@ -95,7 +95,7 @@ export default function AddPost() {
    const addPost = async () => {
       try {
          await axios
-            .post('http://localhost:3002/api/post/add', {
+            .post(`${process.env.API_HOST}/post/add`, {
                title,
                text,
                imgUrl,
